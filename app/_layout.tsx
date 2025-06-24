@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
 export default function RootLayout() {
   return (
@@ -6,7 +6,7 @@ export default function RootLayout() {
       {/* Fliknavigeringen från mappen (tabs) */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-      {/* Fler stack-skärmar kan läggas till här */}
+      {/* Lägg till fler stack-skärmar här om du vill */}
       <Stack.Screen name="+not-found" />
     </Stack>
   );

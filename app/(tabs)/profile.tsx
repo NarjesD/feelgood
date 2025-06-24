@@ -1,10 +1,10 @@
 import { ThemedView } from "@/components/ThemedView";
 import { StyleSheet, Text } from "react-native";
 
-export default function About() {
+export default function Profile() {
   return (
     <ThemedView style={styles.container}>
-      <Text style={styles.text}>HEJSAN!</Text>
+      <Text style={styles.text}>HEJSAN VÄlKOMMEN TILL PROFIL</Text>
     </ThemedView>
   );
 }
@@ -12,11 +12,22 @@ export default function About() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    backgroundColor: "#FF69B4",
+    padding: 0,
+    margin: 0,
   },
   text: {
-    color: "white",
-    fontSize: 150
+    color: "#FFFF00",
+    fontSize: 96,
+    fontWeight: "900",
+    fontStyle: "italic",
+    textTransform: "uppercase",
+    letterSpacing: 10,
+    lineHeight: 120,
+    marginTop: 5,
+    marginLeft: 2,
+    textAlign: "right",
   },
 });

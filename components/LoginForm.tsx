@@ -12,14 +12,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-
-import { signOut } from "firebase/auth";
-import { useEffect } from "react";
 import { auth } from "../firebase/firebase-config";
 
-useEffect(() => {
-  signOut(auth); // Loggar ut automatiskt vid appstart
-}, []);
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

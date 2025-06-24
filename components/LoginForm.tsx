@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import {
-  View,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
+
+import { useRouter } from "expo-router";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+
+import { signOut } from "firebase/auth";
+import { useEffect } from "react";
 import { auth } from "../firebase/firebase-config";
 
+useEffect(() => {
+  signOut(auth); // Loggar ut automatiskt vid appstart
+}, []);
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,30 +27,32 @@ export default function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const isFormValid = email.trim() !== "" && password.trim() !== "";
- 
+  const router = useRouter();
 
   const handleSubmit = async () => {
     if (!isLogin && password !== confirmPassword) {
-      alert("The password doesn´t match");
+      alert("Lösenorden matchar inte");
       return;
     }
 
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
+        router.push("/profile");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
+        router.push("/profile");
       }
     } catch {
-      setError("Wrong username or password");
+      setError("Fel användarnamn eller lösenord");
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{isLogin ? "Login" : "Create an account"}</Text>
+      <Text style={styles.title}>{isLogin ? "Logga in" : "Skapa konto"}</Text>
 
-      <Text style={styles.label}>Email</Text>
+      <Text style={styles.label}>E-post</Text>
       <TextInput
         style={styles.input}
         keyboardType="email-address"
@@ -52,7 +62,7 @@ export default function LoginForm() {
         onChangeText={setEmail}
       />
 
-      <Text style={styles.label}>Password</Text>
+      <Text style={styles.label}>Lösenord</Text>
       <TextInput
         style={styles.input}
         secureTextEntry
@@ -60,10 +70,9 @@ export default function LoginForm() {
         onChangeText={setPassword}
       />
 
-
       {!isLogin && (
         <>
-          <Text style={styles.label}>confirm password</Text>
+          <Text style={styles.label}>Bekräfta lösenord</Text>
           <TextInput
             style={styles.input}
             secureTextEntry
@@ -81,17 +90,17 @@ export default function LoginForm() {
         disabled={!isFormValid}
       >
         <Text style={styles.buttonText}>
-          {isLogin ? "Login" : "Register"}
+          {isLogin ? "Logga in" : "Registrera"}
         </Text>
       </TouchableOpacity>
 
-          <View style={styles.toggleContainer}>
+      <View style={styles.toggleContainer}>
         <Text style={styles.toggleTextWhite}>
-          {isLogin ? "Don´t you have an account?" : "Do you already have an account?"}
+          {isLogin ? "Har du inget konto?" : "Har du redan ett konto?"}
         </Text>
         <TouchableOpacity onPress={() => setIsLogin(!isLogin)}>
           <Text style={styles.toggleText}>
-            {isLogin ? "Register here" : "Login here"}
+            {isLogin ? "Registrera dig här" : "Logga in här"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -100,54 +109,75 @@ export default function LoginForm() {
 }
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 30,
   },
   title: {
-    fontSize: 24,
-    marginBottom: 20,
-    color: "white",
+    fontSize: 12,
+    marginBottom: 30,
+    color: "#FBCEB1",
+    textAlign: "center",
   },
   label: {
-    marginTop: 10,
-    marginBottom: 5,
-    color: "white",
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 10,
+    color: "#FBCEB1",
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 5,
-    color: "white",
+    height: 50,
+    fontSize: 58,
+    borderWidth: 2,
+    borderColor: "#FBCEB1",
+    padding: 15,
+    borderRadius: 12,
+    color: "#FBCEB1",
+    backgroundColor: "#2e2e2e",
+    width: "105%",
+    alignSelf: "center",
+    marginLeft: "-2.5%",
   },
   button: {
-    backgroundColor: "#007AFF",
-    padding: 15,
-    marginTop: 20,
-    borderRadius: 5,
+    backgroundColor: "#FBCEB1",
+    padding: 20,
+    marginTop: 30,
+    borderRadius: 16,
     alignItems: "center",
+    width: "105%",
+    alignSelf: "center",
+    marginLeft: "-2.5%",
   },
-   buttonText: {
-    color: "white",
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 10,
     fontWeight: "bold",
   },
   toggleContainer: {
     flexDirection: "row",
-    marginTop: 20,
+    marginTop: 30,
     justifyContent: "center",
   },
   toggleText: {
-    color: "#007AFF",
-    paddingLeft: 5,
+    color: "#FBCEB1",
+    fontSize: 10,
+    paddingLeft: 10,
   },
   error: {
-    marginTop: 10,
-    color: "red",
+    marginTop: 15,
+    color: "#FBCEB1",
+    fontSize: 28,
+    textAlign: "center",
   },
   toggleTextWhite: {
-    color: "white",
+    color: "#FBCEB1",
+    fontSize: 10,
   },
   disabledButton: {
-    backgroundColor: "gray",
-    color: "white",
+    backgroundColor: "#FBCEB1",
+    color: "#FBCEB1",
+    padding: 20,
+    borderRadius: 16,
+    width: "105%",
+    alignSelf: "center",
+    marginLeft: "-2.5%",
   },
 });
